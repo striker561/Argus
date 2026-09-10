@@ -9,27 +9,28 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.core.config import environment, logger
+from app.core.database import init_database, shutdown_database
 from app.core.exceptions import format_validation_errors
 from app.core.helpers import APIResponse
-from app.core.storage.dependency import get_database_engine, get_redis_cache
+from app.core.redis import get_redis
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncGenerator[None, None]:
-    database_engine = get_database_engine()
-    await database_engine.start(logger)
+    await init_database()
 
-    redis_cache = None
-    if environment.REDIS_URL:
-        redis_cache = get_redis_cache()
-        await redis_cache.connect()
+    redis_client = get_redis()
+    try:
+        await redis_client.connect()
+    except Exception:
+        # Keep serving so the dashboard can report the connection as down.
+        logger.error("Redis unavailable at startup")
 
     try:
         yield
     finally:
-        await database_engine.turn_off(logger)
-        if redis_cache is not None:
-            await redis_cache.disconnect()
+        await shutdown_database()
+        await redis_client.disconnect()
 
 
 app = FastAPI(

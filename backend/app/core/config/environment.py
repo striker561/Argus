@@ -14,13 +14,13 @@ class Environment(BaseSettings):
     IS_PRODUCTION: bool = False
     LOG_LEVEL: str = "INFO"
 
-    DATABASE_URL: str = "sqlite:///./argus.db"
+    DATABASE_URL: str = "sqlite+aiosqlite:///./argus.db"
     DATABASE_POOL_SIZE: int = 5
     DATABASE_MAX_OVERFLOW: int = 10
     DATABASE_POOL_TIMEOUT: int = 30
 
-    # Optional: Redis used by Argus itself for cache / pub-sub.
-    REDIS_URL: str | None = None
+    # Redis to monitor — required: Argus reads the job queues from here.
+    REDIS_URL: str = "redis://localhost:6379/0"
 
     CORS_ORIGINS: str = "http://localhost:3000"
 
