@@ -1,0 +1,126 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+
+# ================================
+# MyPy Configuration
+# ================================
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+show_column_numbers = true
+ignore_missing_imports = false
+explicit_package_bases = true
+
+# SQLAlchemy plugin
+plugins = ["sqlalchemy.ext.mypy.plugin"]
+
+[[tool.mypy.overrides]]
+# Third-party packages that don't ship complete type information.
+module = [
+    "dotenv.*",
+    "pydantic_settings.*",
+    "redis.*",
+]
+ignore_missing_imports = true
+
+# ================================
+# Ruff Configuration
+# ================================
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+
+[tool.ruff.lint]
+select = [
+    "E", "W",    # pycodestyle
+    "F",         # pyflakes
+    "I",         # isort
+    "B",         # flake8-bugbear
+    "C4",        # flake8-comprehensions
+    "UP",        # pyupgrade
+    "SIM",       # flake8-simplify
+    "TCH",       # flake8-type-checking
+    "Q",         # flake8-quotes
+    "PTH",       # flake8-use-pathlib
+    "ERA",       # eradicate commented code
+    "PGH",       # pygrep-hooks
+    "RUF",       # ruff-specific
+    "C90",       # mccabe complexity
+    "S",         # bandit security
+]
+
+ignore = [
+    "D100", "D101", "D102", "D103", "D104", "D105",  # Missing docstrings
+    "D203", "D213",                                   # Docstring formatting conflicts
+    "S104", "S106", "S108",                          # Security false positives
+    "ARG001",                                         # Unused function args (FastAPI)
+]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*.py" = ["S101", "D"]           # asserts + docstrings in tests
+"app/**/routes.py" = ["B008"]          # Allow FastAPI Depends()
+"app/**/dependencies.py" = ["B008"]    # Allow FastAPI Depends()
+
+# ================================
+# Pytest Configuration
+# ================================
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = ["--strict-markers", "--strict-config", "--tb=short"]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+asyncio_mode = "auto"
+
+# ================================
+# Coverage Configuration
+# ================================
+[tool.coverage.run]
+source = ["app"]
+omit = [
+    "tests/*",
+    "*/.venv/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
+
+# ================================
+# Bandit Configuration
+# ================================
+[tool.bandit]
+targets = ["app"]
+exclude_dirs = ["tests"]
+skips = [
+  "B101",  # assert used
+  "B105",  # hardcoded password string
+  "B106",  # hardcoded password funcarg
+  "B107",  # hardcoded password default
+  "B301",  # pickle.loads
+  "B403",  # import pickle
+]
