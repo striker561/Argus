@@ -8,6 +8,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+from app.connectors.config import init_argus_config
 from app.core.config import environment, logger
 from app.core.database import init_database, shutdown_database
 from app.core.exceptions import format_validation_errors
@@ -17,6 +18,7 @@ from app.core.redis import get_redis
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncGenerator[None, None]:
+    init_argus_config()
     await init_database()
 
     redis_client = get_redis()

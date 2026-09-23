@@ -32,6 +32,7 @@ module = [
     "dotenv.*",
     "pydantic_settings.*",
     "redis.*",
+    "yaml.*",
 ]
 ignore_missing_imports = true
 

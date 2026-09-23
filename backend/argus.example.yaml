@@ -1,0 +1,18 @@
+# argus.yaml — copy this file to argus.yaml and edit it.
+# Argus reads ./argus.yaml from the current working directory, or the path in
+# the ARGUS_CONFIG_PATH environment variable when set.
+
+# --- Minimal ---
+connections:
+  - name: my-app
+    redis_url: redis://localhost:6379/0
+    stack: laravel
+
+# --- Full example (replace the block above) ---
+# connections:
+#   - name: socialcheap
+#     redis_url: ${SOCIALCHEAP_REDIS_URL}
+#     stack: laravel
+#   - name: boreas
+#     redis_url: ${BOREAS_REDIS_URL}
+#     stack: arq

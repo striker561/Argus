@@ -1,4 +1,5 @@
 from functools import lru_cache
+from pathlib import Path
 
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -23,6 +24,9 @@ class Environment(BaseSettings):
     REDIS_URL: str = "redis://localhost:6379/0"
 
     CORS_ORIGINS: str = "http://localhost:3000"
+
+    # Path to argus.yaml (relative paths resolve against the cwd).
+    ARGUS_CONFIG_PATH: Path = Path("argus.yaml")
 
     model_config = SettingsConfigDict(
         case_sensitive=True,
