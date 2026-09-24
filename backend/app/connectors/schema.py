@@ -11,3 +11,4 @@ class ConnectionConfig(BaseModel):
     name: str = Field(min_length=1)
     redis_url: str = Field(min_length=1)
     stack: Stack
+    prefix: str = ""

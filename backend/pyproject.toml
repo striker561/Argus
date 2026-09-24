@@ -87,6 +87,7 @@ max-complexity = 10
 minversion = "6.0"
 addopts = ["--strict-markers", "--strict-config", "--tb=short"]
 testpaths = ["tests"]
+pythonpath = ["."]
 python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
