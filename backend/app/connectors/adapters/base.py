@@ -73,7 +73,7 @@ class QueueAdapter(ABC):
         """Return a page of job IDs + minimal metadata. No full payloads."""
 
     @abstractmethod
-    async def get_job(self, job_id: str) -> JobDetail:
+    async def get_job(self, job_id: str, queue: str) -> JobDetail:
         """Return the full payload for one job, for the inspect view."""
 
     @abstractmethod

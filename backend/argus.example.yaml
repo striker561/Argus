@@ -10,9 +10,15 @@ connections:
 
 # --- Full example (replace the block above) ---
 # connections:
-#   - name: socialcheap
-#     redis_url: ${SOCIALCHEAP_REDIS_URL}
+#   - name: argus-app
+#     redis_url: ${ARGUS_APP_REDIS_URL}
 #     stack: laravel
-#   - name: boreas
-#     redis_url: ${BOREAS_REDIS_URL}
+#     # Key prefix the stack adds at the Redis client level. Laravel defaults it
+#     # to "{APP_NAME slug}-database-" (database.redis.options.prefix) and
+#     # prepends it to every key, so without it Argus finds nothing.
+#     # Optional; leave empty when the stack does not prefix. ensure to confirm
+#     prefix: argus-database-
+#
+#   - name: argus-worker
+#     redis_url: ${ARGUS_WORKER_REDIS_URL}
 #     stack: arq
